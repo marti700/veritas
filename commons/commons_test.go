@@ -2,7 +2,7 @@ package commons_test
 
 import (
 	"testing"
-	"veritas/commons"
+	"github.com/marti700/veritas/commons"
 )
 
 func TestSum(t *testing.T) {

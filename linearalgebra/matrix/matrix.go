@@ -2,7 +2,7 @@ package matrix
 
 import (
 	"errors"
-	"veritas/linearalgebra/vector"
+	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
 // struct that represents a matrix
@@ -57,11 +57,11 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 	// and the columns of the m1 (the matrix passed as argument) and by using the dot product in each interaction
 	// produces the result matrix in row major order. Basically it takes to matrices in row major order multiplies them
 	// and the result will be also in row major order
-	for i := 0; i < len(m.Data); i = (i+m.Col) {
+	for i := 0; i < len(m.Data); i = (i + m.Col) {
 		v1 := vector.NewVector(m.Data[i:(i + m.Col)]) // holds current row of this matrix as a vector
 		for j := 0; j < m1.Col; j++ {
 			v2 := vector.NewVector(selectElements(m1, j, m1.Col)) // holds the current row of the m1 matrix (the one passed as argument) as a vector
-			result[r_index] = v1.DotProduct(v2) //sets the dot product of the two vectors to the result slice
+			result[r_index] = v1.DotProduct(v2)                   //sets the dot product of the two vectors to the result slice
 			r_index++
 		}
 	}
@@ -73,9 +73,46 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 	}, nil
 }
 
+// Inserts a column to a matrix at a given index, the index parameter is the index at which the new column will be
+// E.X
+// if IsertCall is called in this matrix
+// [1 2]
+// [3 4]
+// with colum [8,9] and index 1
+// This function with return the row major order quivalent of the Matrix
+// [1,8,2]
+// [3,9,4]
+func (m Matrix) InsertCol(column []float64, index int) (Matrix, error) {
+	if len(column) < m.Row || len(column) > m.Row {
+		return Matrix{}, errors.New("invalid column. Column lenght should be equal to matrix row length")
+	}
+
+	newMatrix := make([]float64, len(m.Data)+len(column))
+
+	var mDataIndex int
+	for i := 0; i < len(newMatrix); i++ {
+		if i == index {
+			// newMatrixIndex++
+			newMatrix[i] = column[0]
+			index = i + m.Col +1  // sets up when the next element column insertion will be
+			column = column[1:] // remove the first element of the column slice
+		} else {
+			// newMatrixIndex++
+			newMatrix[i] = m.Data[mDataIndex] // copy data to new matrix slice
+			mDataIndex++
+		}
+	}
+
+	return Matrix{
+		Row:  m.Row,
+		Col:  m.Col + 1,
+		Data: newMatrix,
+	}, nil
+}
+
 // MATRIX UTILS
 
-// transforms a slice to row major order
+// transforms a 2d slice to a row major order matrix
 func toRowMajor(m [][]float64) []float64 {
 	var rmo []float64
 	for i := 0; i < len(m); i++ {
@@ -86,10 +123,11 @@ func toRowMajor(m [][]float64) []float64 {
 	return rmo
 }
 
-// returns the value of the matrix at index [i,j] assumming that matrix#Data is a valid 1D slice and is in row major order
+// returns the value of the matrix at index [i,j] assumming that matrix.Data holds a valid row major order matrix
 func (m Matrix) Get(i, j int) float64 {
 	return m.Data[(i*m.Col)+j]
 }
+
 // Select x distant elements from matrix expresed in row major order
 // EJ:
 //[1,2,3,4,5,6] which is let's soupouse a 2X3 matrix

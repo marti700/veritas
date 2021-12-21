@@ -1,7 +1,7 @@
 package vector_test
 
 import (
-	"veritas/linearalgebra/vector"
+	"github.com/marti700/veritas/linearalgebra/vector"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package vector
 
 import (
-	"veritas/commons"
+	"github.com/marti700/veritas/commons"
 )
 
 type Vector struct {
