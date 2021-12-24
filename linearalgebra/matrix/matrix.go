@@ -73,6 +73,19 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 	}, nil
 }
 
+// inserts a vector into this matrix at the provided index
+// E.X
+// if IsertCall is called in this matrix
+// [1 2]
+// [3 4]
+// with colum [8,9] and index 1
+// This function with return the row major order quivalent of the Matrix
+// [1,8,2]
+// [3,9,4]
+func (m Matrix) InsertColAt(column vector.Vector,  index int) (Matrix, error){
+	return InsertCol(m,column.Data,index)
+}
+
 // Inserts a column to a matrix at a given index, the index parameter is the index at which the new column will be
 // E.X
 // if IsertCall is called in this matrix
@@ -82,7 +95,7 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 // This function with return the row major order quivalent of the Matrix
 // [1,8,2]
 // [3,9,4]
-func (m Matrix) InsertCol(column []float64, index int) (Matrix, error) {
+func InsertCol(m Matrix, column []float64, index int) (Matrix, error) {
 	if len(column) < m.Row || len(column) > m.Row {
 		return Matrix{}, errors.New("invalid column. Column lenght should be equal to matrix row length")
 	}
@@ -92,12 +105,10 @@ func (m Matrix) InsertCol(column []float64, index int) (Matrix, error) {
 	var mDataIndex int
 	for i := 0; i < len(newMatrix); i++ {
 		if i == index {
-			// newMatrixIndex++
 			newMatrix[i] = column[0]
 			index = i + m.Col +1  // sets up when the next element column insertion will be
 			column = column[1:] // remove the first element of the column slice
 		} else {
-			// newMatrixIndex++
 			newMatrix[i] = m.Data[mDataIndex] // copy data to new matrix slice
 			mDataIndex++
 		}

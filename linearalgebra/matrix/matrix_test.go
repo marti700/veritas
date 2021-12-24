@@ -2,8 +2,10 @@ package matrix_test
 
 import (
 	"fmt"
-	"github.com/marti700/veritas/linearalgebra/matrix"
 	"testing"
+
+	"github.com/marti700/veritas/linearalgebra/matrix"
+	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
 func TestTranspose(t *testing.T) {
@@ -80,17 +82,16 @@ func TestMult1(t *testing.T) {
 func TestInsertCol(t *testing.T) {
 	m := matrix.NewMatrix([][]float64{{1, 2}, {3, 4}})
 	ans := matrix.NewMatrix([][]float64{{8, 1, 2}, {9, 3, 4}})
-	result, _ := m.InsertCol([]float64{8, 9}, 0)
+	result, _ := m.InsertColAt(vector.NewVector([]float64{8, 9}), 0)
 
 	if !matrixEq1(result, ans) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 
-	m1 := matrix.NewMatrix([][]float64{{0,1,2},{3,4,5},{6,7,8},{9,10,11}})
-	// ans1 := matrix.NewMatrix([][]float64{{1,0,1,2},{2,3,4,5},{3,6,7,8},{4,9,10,11}})
-	ans1 := matrix.NewMatrix([][]float64{{0,1,1,2},{3,2,4,5},{6,3,7,8},{9,4,10,11}})
-	result1, _ := m1.InsertCol([]float64{1,2,3,4}, 1)
+	m1 := matrix.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
+	ans1 := matrix.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
+	result1, _ := m1.InsertColAt(vector.NewVector([]float64{1, 2, 3, 4}), 1)
 
 	if !matrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
@@ -114,6 +115,5 @@ func matrixEq1(m1, m2 matrix.Matrix) bool {
 		}
 		return true
 	}()
-
 	return equalRows && equalCols && equalData
 }
