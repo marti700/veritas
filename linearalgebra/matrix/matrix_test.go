@@ -98,6 +98,20 @@ func TestInsertCol(t *testing.T) {
 	}
 }
 
+func TestGetRow(t *testing.T) {
+	m := matrix.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+	})
+
+	ans := vector.NewVector([]float64{1, 2, 3})
+	result := m.GetRow(0)
+
+	if !vectorEq(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
+
 // Test utils
 
 func matrixEq1(m1, m2 matrix.Matrix) bool {
@@ -116,4 +130,17 @@ func matrixEq1(m1, m2 matrix.Matrix) bool {
 		return true
 	}()
 	return equalRows && equalCols && equalData
+}
+
+// Tests if two vectors are equal
+func vectorEq(v1, v2 vector.Vector) bool {
+	if v1.Size != v2.Size {
+		return false
+	}
+	for i := 0; i < v1.Size; i++ {
+		if v1.Data[i] != v2.Data[i] {
+			return false
+		}
+	}
+	return true
 }

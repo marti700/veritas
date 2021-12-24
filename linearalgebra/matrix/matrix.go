@@ -82,8 +82,8 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 // This function with return the row major order quivalent of the Matrix
 // [1,8,2]
 // [3,9,4]
-func (m Matrix) InsertColAt(column vector.Vector,  index int) (Matrix, error){
-	return InsertCol(m,column.Data,index)
+func (m Matrix) InsertColAt(column vector.Vector, index int) (Matrix, error) {
+	return InsertCol(m, column.Data, index)
 }
 
 // Inserts a column to a matrix at a given index, the index parameter is the index at which the new column will be
@@ -106,8 +106,8 @@ func InsertCol(m Matrix, column []float64, index int) (Matrix, error) {
 	for i := 0; i < len(newMatrix); i++ {
 		if i == index {
 			newMatrix[i] = column[0]
-			index = i + m.Col +1  // sets up when the next element column insertion will be
-			column = column[1:] // remove the first element of the column slice
+			index = i + m.Col + 1 // sets up when the next element column insertion will be
+			column = column[1:]   // remove the first element of the column slice
 		} else {
 			newMatrix[i] = m.Data[mDataIndex] // copy data to new matrix slice
 			mDataIndex++
@@ -119,6 +119,15 @@ func InsertCol(m Matrix, column []float64, index int) (Matrix, error) {
 		Col:  m.Col + 1,
 		Data: newMatrix,
 	}, nil
+}
+
+// returns the the specified row of this matrix as a Vector
+// this method assumes zero based index matrix, the first row index is 0
+// the second row index is one, and so on...
+func (m Matrix) GetRow(index int) vector.Vector {
+	start := coordsToRowMajorIndex(index, 0, m.Col)
+	end := start + m.Col
+	return vector.NewVector(m.Data[start:end])
 }
 
 // MATRIX UTILS
@@ -136,7 +145,16 @@ func toRowMajor(m [][]float64) []float64 {
 
 // returns the value of the matrix at index [i,j] assumming that matrix.Data holds a valid row major order matrix
 func (m Matrix) Get(i, j int) float64 {
-	return m.Data[(i*m.Col)+j]
+	return m.Data[coordsToRowMajorIndex(i, j, m.Col)]
+}
+
+// given the coordinates of a matrix (row,column) and the total number of columns of a matrix
+// returns the equivalent matrix index in row major order
+// i: the rows of the matrix
+// j: the columns of the matrix
+// m: the total number of columns of the matrix
+func coordsToRowMajorIndex(i, j, m int) int {
+	return (i * m) + j
 }
 
 // Select x distant elements from matrix expresed in row major order
