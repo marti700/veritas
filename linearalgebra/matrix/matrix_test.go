@@ -112,6 +112,21 @@ func TestGetRow(t *testing.T) {
 	}
 }
 
+func TestGetCol(t *testing.T) {
+	m := matrix.NewMatrix([][]float64{
+		{1,2},
+		{3,4},
+		{5,6},
+	})
+
+	ans := vector.NewVector([]float64{1, 3, 5})
+	result := m.GetCol(0)
+
+	if !vectorEq(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
+
 // Test utils
 
 func matrixEq1(m1, m2 matrix.Matrix) bool {

@@ -130,6 +130,26 @@ func (m Matrix) GetRow(index int) vector.Vector {
 	return vector.NewVector(m.Data[start:end])
 }
 
+// returns the the specified row of this matrix as a Vector
+// this method assumes zero based index matrix, the first column index is 0
+// the second column index is one, and so on...
+func (m Matrix) GetCol(index int) vector.Vector {
+	// the index of the first element of the column
+	mIndex := coordsToRowMajorIndex(0, index, m.Col)
+	jumps := m.Row
+	i := 0
+	col := make([]float64, m.Row)
+	for jumps > 0 {
+		col[i] = m.Data[mIndex]
+		mIndex += m.Row - 1
+		jumps--
+		i++
+	}
+	// end := start + m.Col
+	// return vector.NewVector(m.Data[start:end])
+	return vector.NewVector(col)
+}
+
 // MATRIX UTILS
 
 // transforms a 2d slice to a row major order matrix
@@ -148,7 +168,7 @@ func (m Matrix) Get(i, j int) float64 {
 	return m.Data[coordsToRowMajorIndex(i, j, m.Col)]
 }
 
-// given the coordinates of a matrix (row,column) and the total number of columns of a matrix
+// given the coordinates of a matrix (row,column) and the matrix total number of columns
 // returns the equivalent matrix index in row major order
 // i: the rows of the matrix
 // j: the columns of the matrix
