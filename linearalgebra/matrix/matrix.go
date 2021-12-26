@@ -57,11 +57,11 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 	// and the columns of the m1 (the matrix passed as argument) and by using the dot product in each interaction
 	// produces the result matrix in row major order. Basically it takes to matrices in row major order multiplies them
 	// and the result will be also in row major order
-	for i := 0; i < len(m.Data); i = (i + m.Col) {
-		v1 := vector.NewVector(m.Data[i:(i + m.Col)]) // holds current row of this matrix as a vector
+	for i := 0; i < m.Row; i++ {
+		v1 := m.GetRow(i) // holds current row of this matrix as a vector
 		for j := 0; j < m1.Col; j++ {
-			v2 := vector.NewVector(selectElements(m1, j, m1.Col)) // holds the current row of the m1 matrix (the one passed as argument) as a vector
-			result[r_index] = v1.DotProduct(v2)                   //sets the dot product of the two vectors to the result slice
+			v2 := m1.GetCol(j)                  // holds the current row of the m1 matrix (the one passed as argument) as a vector
+			result[r_index] = v1.DotProduct(v2) //sets the dot product of the two vectors to the result slice
 			r_index++
 		}
 	}
@@ -141,7 +141,7 @@ func (m Matrix) GetCol(index int) vector.Vector {
 	col := make([]float64, m.Row)
 	for jumps > 0 {
 		col[i] = m.Data[mIndex]
-		mIndex += m.Row - 1
+		mIndex += m.Col
 		jumps--
 		i++
 	}
@@ -175,20 +175,4 @@ func (m Matrix) Get(i, j int) float64 {
 // m: the total number of columns of the matrix
 func coordsToRowMajorIndex(i, j, m int) int {
 	return (i * m) + j
-}
-
-// Select x distant elements from matrix expresed in row major order
-// EJ:
-//[1,2,3,4,5,6] which is let's soupouse a 2X3 matrix
-//a call to selectElements with stardIndex = 2 and increment = 3 will result in
-// [3,6]
-func selectElements(m Matrix, startIndex, increment int) []float64 {
-	var v = make([]float64, m.Row)
-	var vIndex int
-	for i := startIndex; vIndex < m.Row; {
-		v[vIndex] = m.Data[i]
-		i = i + increment
-		vIndex++
-	}
-	return v
 }
