@@ -1,4 +1,4 @@
-package matrix
+package linearalgebra
 
 import (
 	"errors"
@@ -7,6 +7,8 @@ import (
 
 // struct that represents a matrix
 // The Data field store the contents of the matrix in row major order
+// a matrix with one row and n columns is a called  row vector
+// a matrix with one n rows and one column is called a column vector
 type Matrix struct {
 	Row  int
 	Col  int

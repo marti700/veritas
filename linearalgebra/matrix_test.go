@@ -1,22 +1,22 @@
-package matrix_test
+package linearalgebra_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/marti700/veritas/linearalgebra/matrix"
+	"github.com/marti700/veritas/linearalgebra"
 	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
 func TestTranspose(t *testing.T) {
-	mat := matrix.NewMatrix([][]float64{
+	mat := linearalgebra.NewMatrix([][]float64{
 		{1, 2, 3},
 		{4, 5, 6},
 	})
 
 	ans := mat.T()
 
-	expectedAnswer := matrix.NewMatrix([][]float64{
+	expectedAnswer := linearalgebra.NewMatrix([][]float64{
 		{1, 4},
 		{2, 5},
 		{3, 6},
@@ -28,17 +28,17 @@ func TestTranspose(t *testing.T) {
 }
 
 func TestMult(t *testing.T) {
-	m1 := matrix.NewMatrix([][]float64{
+	m1 := linearalgebra.NewMatrix([][]float64{
 		{1, 2, 3},
 		{4, 5, 6},
 	})
-	m2 := matrix.NewMatrix([][]float64{
+	m2 := linearalgebra.NewMatrix([][]float64{
 		{10, 11},
 		{20, 21},
 		{30, 31},
 	})
 
-	result := matrix.NewMatrix([][]float64{
+	result := linearalgebra.NewMatrix([][]float64{
 		{140, 146},
 		{320, 335},
 	})
@@ -52,19 +52,19 @@ func TestMult(t *testing.T) {
 }
 
 func TestMult1(t *testing.T) {
-	m1 := matrix.NewMatrix([][]float64{
+	m1 := linearalgebra.NewMatrix([][]float64{
 		{0, 1, 2},
 		{3, 4, 5},
 		{6, 7, 8},
 		{9, 10, 11},
 	})
-	m2 := matrix.NewMatrix([][]float64{
+	m2 := linearalgebra.NewMatrix([][]float64{
 		{0, 3, 6, 9},
 		{1, 4, 7, 10},
 		{2, 5, 8, 11},
 	})
 
-	result := matrix.NewMatrix([][]float64{
+	result := linearalgebra.NewMatrix([][]float64{
 		{5, 14, 23, 32},
 		{14, 50, 86, 122},
 		{23, 86, 149, 212},
@@ -80,8 +80,8 @@ func TestMult1(t *testing.T) {
 }
 
 func TestInsertCol(t *testing.T) {
-	m := matrix.NewMatrix([][]float64{{1, 2}, {3, 4}})
-	ans := matrix.NewMatrix([][]float64{{8, 1, 2}, {9, 3, 4}})
+	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
+	ans := linearalgebra.NewMatrix([][]float64{{8, 1, 2}, {9, 3, 4}})
 	result, _ := m.InsertColAt(vector.NewVector([]float64{8, 9}), 0)
 
 	if !matrixEq1(result, ans) {
@@ -89,8 +89,8 @@ func TestInsertCol(t *testing.T) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 
-	m1 := matrix.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
-	ans1 := matrix.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
+	m1 := linearalgebra.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
+	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
 	result1, _ := m1.InsertColAt(vector.NewVector([]float64{1, 2, 3, 4}), 1)
 
 	if !matrixEq1(result1, ans1) {
@@ -99,7 +99,7 @@ func TestInsertCol(t *testing.T) {
 }
 
 func TestGetRow(t *testing.T) {
-	m := matrix.NewMatrix([][]float64{
+	m := linearalgebra.NewMatrix([][]float64{
 		{1, 2, 3},
 		{4, 5, 6},
 	})
@@ -113,7 +113,7 @@ func TestGetRow(t *testing.T) {
 }
 
 func TestGetCol(t *testing.T) {
-	m := matrix.NewMatrix([][]float64{
+	m := linearalgebra.NewMatrix([][]float64{
 		{1,2},
 		{3,4},
 		{5,6},
@@ -129,7 +129,7 @@ func TestGetCol(t *testing.T) {
 
 // Test utils
 
-func matrixEq1(m1, m2 matrix.Matrix) bool {
+func matrixEq1(m1, m2 linearalgebra.Matrix) bool {
 	equalRows := m1.Row == m2.Row
 	equalCols := m1.Col == m2.Col
 	equalData := func() bool {
