@@ -81,8 +81,8 @@ func TestMult1(t *testing.T) {
 
 func TestInsertCol(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
-	ans := linearalgebra.NewMatrix([][]float64{{8, 1, 2}, {9, 3, 4}})
-	result, _ := m.InsertColAt(vector.NewVector([]float64{8, 9}), 0)
+	ans := linearalgebra.NewMatrix([][]float64{{8,9},{1, 2}, {3, 4}})
+	result, _ := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8,9}}), 0)
 
 	if !matrixEq1(result, ans) {
 		fmt.Println(ans)
@@ -91,7 +91,7 @@ func TestInsertCol(t *testing.T) {
 
 	m1 := linearalgebra.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
 	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
-	result1, _ := m1.InsertColAt(vector.NewVector([]float64{1, 2, 3, 4}), 1)
+	result1, _ := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
 
 	if !matrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
