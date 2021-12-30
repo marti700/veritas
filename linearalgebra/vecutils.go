@@ -38,6 +38,7 @@ func DotProduct(v1, v2 Matrix) (float64, error) {
 	return sum, nil
 }
 
+// returns true if a matrix is a vector false otherwise
 func isVector(v Matrix) bool {
 	if v.Row == 1 && v.Col > 1 {
 		return true
