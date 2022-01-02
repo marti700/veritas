@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/marti700/veritas/linearalgebra"
+	"github.com/marti700/veritas/linearalgebra/lintest"
 	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
@@ -104,10 +105,10 @@ func TestGetRow(t *testing.T) {
 		{4, 5, 6},
 	})
 
-	ans := vector.NewVector([]float64{1, 2, 3})
+	ans := linearalgebra.NewMatrix([][]float64{{1, 2, 3}})
 	result := m.GetRow(0)
 
-	if !vectorEq(ans, result) {
+	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -119,10 +120,10 @@ func TestGetCol(t *testing.T) {
 		{5,6},
 	})
 
-	ans := vector.NewVector([]float64{1, 3, 5})
+	ans := linearalgebra.NewMatrix([][]float64{{1}, {3}, {5}})
 	result := m.GetCol(0)
 
-	if !vectorEq(ans, result) {
+	if !matrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }

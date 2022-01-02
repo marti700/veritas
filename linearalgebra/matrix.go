@@ -2,7 +2,6 @@ package linearalgebra
 
 import (
 	"errors"
-	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
 // struct that represents a matrix
@@ -62,8 +61,8 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 	for i := 0; i < m.Row; i++ {
 		v1 := m.GetRow(i) // holds current row of this matrix as a vector
 		for j := 0; j < m1.Col; j++ {
-			v2 := m1.GetCol(j)                  // holds the current row of the m1 matrix (the one passed as argument) as a vector
-			result[r_index] = v1.DotProduct(v2) //sets the dot product of the two vectors to the result slice
+			v2 := m1.GetCol(j)                      // holds the current col of the m1 matrix (the one passed as argument) as a vector
+			result[r_index], _ = DotProduct(v1, v2) //sets the dot product of the two vectors to the result slice
 			r_index++
 		}
 	}
@@ -80,7 +79,7 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 // if vector is a row vector a new row will be inserted into this matrix at the provided index
 func (m Matrix) InsertAt(v Matrix, index int) (Matrix, error) {
 	if !isVector(v) {
-		errors.New("column should be a Vector")
+		return Matrix{}, errors.New("column should be a Vector")
 	}
 
 	if v.Row > 1 {
@@ -160,30 +159,34 @@ func insertCol(m Matrix, column []float64, index int) (Matrix, error) {
 // returns the the specified row of this matrix as a Vector
 // this method assumes zero based index matrix, the first row index is 0
 // the second row index is one, and so on...
-func (m Matrix) GetRow(index int) vector.Vector {
+func (m Matrix) GetRow(index int) Matrix {
 	start := coordsToRowMajorIndex(index, 0, m.Col)
 	end := start + m.Col
-	return vector.NewVector(m.Data[start:end])
+	temp := m.Data[start:end]
+	// len 1 because a row vector will be returned
+	rowMatrix := make([][]float64, 1)
+	rowMatrix[0] = temp
+	return NewMatrix(rowMatrix)
 }
 
-// returns the the specified row of this matrix as a Vector
+// returns the the specified row of this matrix as a Nx1 matrix
 // this method assumes zero based index matrix, the first column index is 0
 // the second column index is one, and so on...
-func (m Matrix) GetCol(index int) vector.Vector {
+func (m Matrix) GetCol(index int) Matrix {
 	// the index of the first element of the column
 	mIndex := coordsToRowMajorIndex(0, index, m.Col)
 	jumps := m.Row
 	i := 0
-	col := make([]float64, m.Row)
+	col := make([][]float64, m.Row)
 	for jumps > 0 {
-		col[i] = m.Data[mIndex]
+		col[i] = []float64{m.Data[mIndex]}
 		mIndex += m.Col
 		jumps--
 		i++
 	}
 	// end := start + m.Col
 	// return vector.NewVector(m.Data[start:end])
-	return vector.NewVector(col)
+	return NewMatrix(col)
 }
 
 // MATRIX UTILS
