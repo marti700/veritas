@@ -6,7 +6,6 @@ import (
 
 	"github.com/marti700/veritas/linearalgebra"
 	"github.com/marti700/veritas/linearalgebra/lintest"
-	"github.com/marti700/veritas/linearalgebra/vector"
 )
 
 func TestTranspose(t *testing.T) {
@@ -23,7 +22,7 @@ func TestTranspose(t *testing.T) {
 		{3, 6},
 	})
 
-	if !matrixEq1(ans, expectedAnswer) {
+	if !lintest.MatrixEq1(ans, expectedAnswer) {
 		t.Error("Expected result is: ", expectedAnswer, "but resultWas: ", ans)
 	}
 }
@@ -45,7 +44,7 @@ func TestMult(t *testing.T) {
 	})
 
 	ans, _ := m1.Mult(m2)
-	if !matrixEq1(ans, result) {
+	if !lintest.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
 	}
@@ -73,7 +72,7 @@ func TestMult1(t *testing.T) {
 	})
 
 	ans, _ := m1.Mult(m2)
-	if !matrixEq1(ans, result) {
+	if !lintest.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
 	}
@@ -85,7 +84,7 @@ func TestInsertCol(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{{8,9},{1, 2}, {3, 4}})
 	result, _ := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8,9}}), 0)
 
-	if !matrixEq1(result, ans) {
+	if !lintest.MatrixEq1(result, ans) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
@@ -94,7 +93,7 @@ func TestInsertCol(t *testing.T) {
 	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
 	result1, _ := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
 
-	if !matrixEq1(result1, ans1) {
+	if !lintest.MatrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
 	}
 }
@@ -123,40 +122,7 @@ func TestGetCol(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{{1}, {3}, {5}})
 	result := m.GetCol(0)
 
-	if !matrixEq1(ans, result) {
+	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
-}
-
-// Test utils
-
-func matrixEq1(m1, m2 linearalgebra.Matrix) bool {
-	equalRows := m1.Row == m2.Row
-	equalCols := m1.Col == m2.Col
-	equalData := func() bool {
-		if len(m1.Data) != len(m2.Data) {
-			return false
-		}
-
-		for i, e := range m1.Data {
-			if e != m2.Data[i] {
-				return false
-			}
-		}
-		return true
-	}()
-	return equalRows && equalCols && equalData
-}
-
-// Tests if two vectors are equal
-func vectorEq(v1, v2 vector.Vector) bool {
-	if v1.Size != v2.Size {
-		return false
-	}
-	for i := 0; i < v1.Size; i++ {
-		if v1.Data[i] != v2.Data[i] {
-			return false
-		}
-	}
-	return true
 }
