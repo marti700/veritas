@@ -140,3 +140,15 @@ func TestNewColumnVector(t *testing.T) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
+
+func TestNewRowVector(t *testing.T) {
+	ans := linearalgebra.NewMatrix([][]float64{
+		{1,2,3},
+	})
+
+	result := linearalgebra.NewRowVector([]float64{1,2,3})
+
+	if !lintest.MatrixEq1(ans,result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
