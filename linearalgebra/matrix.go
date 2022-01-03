@@ -26,6 +26,16 @@ func NewMatrix(m [][]float64) Matrix {
 	}
 }
 
+// Builds a matrix with one column and n rows
+// where n is the number of elements of the provided slice
+func NewColumnVector(m []float64) Matrix {
+	temp := make([][]float64, len(m))
+	for i:= 0; i< len(temp); i++ {
+		temp[i] = []float64{m[i]}
+	}
+	return NewMatrix(temp)
+}
+
 //Returns the transpose of this matrix
 func (m Matrix) T() Matrix {
 
