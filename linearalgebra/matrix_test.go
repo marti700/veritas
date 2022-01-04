@@ -81,8 +81,8 @@ func TestMult1(t *testing.T) {
 
 func TestInsertCol(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
-	ans := linearalgebra.NewMatrix([][]float64{{8,9},{1, 2}, {3, 4}})
-	result, _ := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8,9}}), 0)
+	ans := linearalgebra.NewMatrix([][]float64{{8, 9}, {1, 2}, {3, 4}})
+	result, _ := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)
 
 	if !lintest.MatrixEq1(result, ans) {
 		fmt.Println(ans)
@@ -114,9 +114,9 @@ func TestGetRow(t *testing.T) {
 
 func TestGetCol(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{
-		{1,2},
-		{3,4},
-		{5,6},
+		{1, 2},
+		{3, 4},
+		{5, 6},
 	})
 
 	ans := linearalgebra.NewMatrix([][]float64{{1}, {3}, {5}})
@@ -134,21 +134,44 @@ func TestNewColumnVector(t *testing.T) {
 		{3},
 	})
 
-	result := linearalgebra.NewColumnVector([]float64{1,2,3})
+	result := linearalgebra.NewColumnVector([]float64{1, 2, 3})
 
-	if !lintest.MatrixEq1(ans,result) {
+	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
 
 func TestNewRowVector(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{
-		{1,2,3},
+		{1, 2, 3},
 	})
 
-	result := linearalgebra.NewRowVector([]float64{1,2,3})
+	result := linearalgebra.NewRowVector([]float64{1, 2, 3})
 
-	if !lintest.MatrixEq1(ans,result) {
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
+
+func TestSum(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2},
+		{3, -2},
+	})
+
+	m1 := linearalgebra.NewMatrix([][]float64{
+		{4, 5},
+		{-6, -4},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64{
+		{5, 7},
+		{-3, -6},
+	})
+
+	result, _ := m.Sum(m1)
+
+	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }

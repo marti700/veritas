@@ -63,7 +63,25 @@ func (m Matrix) T() Matrix {
 	}
 }
 
-// Returns a matrix which represents the result of multiplying this matrix wiht another
+// Returns a matrix which represents the result of adding this matrix with another
+func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
+	if m.Col != m1.Col || m.Row != m1.Row {
+		return Matrix{}, errors.New("can't add matrices with of diferen dimensions")
+	}
+
+	matrixSum := make([]float64, len(m.Data))
+	for i := range m.Data {
+		matrixSum[i] = m.Data[i] + m1.Data[i]
+	}
+
+	return Matrix{
+		Row: m.Row,
+		Col: m.Col,
+		Data: matrixSum,
+	}, nil
+}
+
+// Returns a matrix which represents the result of multiplying this matrix with another
 func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 
 	if m.Col != m1.Row {
@@ -106,7 +124,6 @@ func (m Matrix) InsertAt(v Matrix, index int) (Matrix, error) {
 		return insertRow(m, v.Data, index)
 	}
 }
-
 
 // returns the the specified row of this matrix as a Vector
 // this method assumes zero based index matrix, the first row index is 0
