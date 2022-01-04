@@ -175,3 +175,21 @@ func TestSum(t *testing.T) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
+
+func TestScleBy(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2},
+		{3, -2},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64{
+		{2, 4},
+		{6, -4},
+	})
+
+	result  := m.ScaleBy(2.0)
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}

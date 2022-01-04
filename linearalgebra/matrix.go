@@ -63,7 +63,21 @@ func (m Matrix) T() Matrix {
 	}
 }
 
-// Returns a matrix which represents the result of adding this matrix with another
+// retun a new matrix with all the entries of this matrix scaled by the given factor
+func (m Matrix) ScaleBy(factor float64) Matrix {
+	newMatrix := make([]float64, len(m.Data))
+	for i := range m.Data {
+		newMatrix[i] = factor * m.Data[i]
+	}
+
+	return Matrix{
+		Row:  m.Row,
+		Col:  m.Col,
+		Data: newMatrix,
+	}
+}
+
+// Returns a new matrix which represents the result of adding this matrix with another
 func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	if m.Col != m1.Col || m.Row != m1.Row {
 		return Matrix{}, errors.New("can't add matrices with of diferen dimensions")
@@ -75,8 +89,8 @@ func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	}
 
 	return Matrix{
-		Row: m.Row,
-		Col: m.Col,
+		Row:  m.Row,
+		Col:  m.Col,
 		Data: matrixSum,
 	}, nil
 }
