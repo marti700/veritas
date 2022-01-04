@@ -207,29 +207,7 @@ func (m Matrix) GetCol(index int) Matrix {
 	return NewMatrix(col)
 }
 
-// MATRIX UTILS
-
-// transforms a 2d slice to a row major order matrix
-func toRowMajor(m [][]float64) []float64 {
-	var rmo []float64
-	for i := 0; i < len(m); i++ {
-		for j := 0; j < len(m[0]); j++ {
-			rmo = append(rmo, m[i][j])
-		}
-	}
-	return rmo
-}
-
 // returns the value of the matrix at index [i,j] assumming that matrix.Data holds a valid row major order matrix
 func (m Matrix) Get(i, j int) float64 {
 	return m.Data[coordsToRowMajorIndex(i, j, m.Col)]
-}
-
-// given the coordinates of a matrix (row,column) and the matrix total number of columns
-// returns the equivalent matrix index in row major order
-// i: the rows of the matrix
-// j: the columns of the matrix
-// m: the total number of columns of the matrix
-func coordsToRowMajorIndex(i, j, m int) int {
-	return (i * m) + j
 }
