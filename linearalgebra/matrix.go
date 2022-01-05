@@ -99,7 +99,7 @@ func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
 	}, nil
 }
 
-// Returns a new matrix which represents the result of adding this matrix with another
+// Returns a new matrix which represents the result of adding this matrix to another
 func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	if m.Col != m1.Col || m.Row != m1.Row {
 		return Matrix{}, errors.New("can't add matrices with of diferen dimensions")
@@ -117,6 +117,7 @@ func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	}, nil
 }
 
+// Returns a new matrix which represents the result of substracting this matrix from another
 func (m Matrix) Substract(m1 Matrix) (Matrix, error) {
 	if m.Col != m1.Col || m.Row != m1.Row {
 		return Matrix{}, errors.New("can't substract matrices with of diferen dimensions")
@@ -134,7 +135,7 @@ func (m Matrix) Substract(m1 Matrix) (Matrix, error) {
 	}, nil
 }
 
-// Returns a matrix which represents the result of multiplying this matrix with another
+// Returns a matrix that represents the result of multiplying this matrix to another
 func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 
 	if m.Col != m1.Row {
