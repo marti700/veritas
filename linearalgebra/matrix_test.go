@@ -176,6 +176,28 @@ func TestSum(t *testing.T) {
 	}
 }
 
+func TestSubsctract(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2},
+		{3, -2},
+	})
+
+	m1 := linearalgebra.NewMatrix([][]float64{
+		{4, 5},
+		{-6, -4},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64{
+		{-3, -3},
+		{9, 2},
+	})
+
+	result, _ := m.Substract(m1)
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
 func TestScleBy(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{
 		{1, 2},

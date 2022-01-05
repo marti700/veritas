@@ -44,22 +44,7 @@ func NewRowVector(m []float64) Matrix {
 	return NewMatrix(temp)
 }
 
-func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
-	if m.Col != m1.Col && m.Row != m1.Row {
-		return Matrix{}, errors.New("error matrices must be of the same dimension")
-	}
 
-	newMatrix := make([]float64, len(m.Data))
-	for i := range m.Data {
-		newMatrix[i] = m.Data[i] * m1.Data[i]
-	}
-
-	return Matrix{
-		Row:  m.Row,
-		Col:  m.Col,
-		Data: newMatrix,
-	}, nil
-}
 
 //Returns the transpose of this matrix
 func (m Matrix) T() Matrix {
@@ -94,6 +79,26 @@ func (m Matrix) ScaleBy(factor float64) Matrix {
 	}
 }
 
+// MATRIX ARITMETIC
+
+// Returns a new matrix that represents the element wise multiplicaton of this matrix and another
+func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
+	if m.Col != m1.Col && m.Row != m1.Row {
+		return Matrix{}, errors.New("error matrices must be of the same dimension")
+	}
+
+	newMatrix := make([]float64, len(m.Data))
+	for i := range m.Data {
+		newMatrix[i] = m.Data[i] * m1.Data[i]
+	}
+
+	return Matrix{
+		Row:  m.Row,
+		Col:  m.Col,
+		Data: newMatrix,
+	}, nil
+}
+
 // Returns a new matrix which represents the result of adding this matrix with another
 func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	if m.Col != m1.Col || m.Row != m1.Row {
@@ -103,6 +108,23 @@ func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 	matrixSum := make([]float64, len(m.Data))
 	for i := range m.Data {
 		matrixSum[i] = m.Data[i] + m1.Data[i]
+	}
+
+	return Matrix{
+		Row:  m.Row,
+		Col:  m.Col,
+		Data: matrixSum,
+	}, nil
+}
+
+func (m Matrix) Substract(m1 Matrix) (Matrix, error) {
+	if m.Col != m1.Col || m.Row != m1.Row {
+		return Matrix{}, errors.New("can't substract matrices with of diferen dimensions")
+	}
+
+	matrixSum := make([]float64, len(m.Data))
+	for i := range m.Data {
+		matrixSum[i] = m.Data[i] - m1.Data[i]
 	}
 
 	return Matrix{
@@ -140,6 +162,8 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 		Data: result,
 	}, nil
 }
+
+// MATRIX ARITMETIC END
 
 // inserts a vector into this matrix at the provided index
 // if vector is a column vector a new column will be added to the marix at the specified index
