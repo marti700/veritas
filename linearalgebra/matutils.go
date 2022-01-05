@@ -2,6 +2,8 @@ package linearalgebra
 
 import (
 	"errors"
+
+	"github.com/marti700/veritas/commons"
 )
 
 // returns a matrix with the specified number of rows and columns
@@ -107,4 +109,9 @@ func insertCol(m Matrix, column []float64, index int) (Matrix, error) {
 		Col:  m.Col + 1,
 		Data: newMatrix,
 	}, nil
+}
+
+// Returns the result of adding all elements of provided matrix
+func ElementsSum (m Matrix) float64  {
+	return commons.Sum(m.Data)
 }

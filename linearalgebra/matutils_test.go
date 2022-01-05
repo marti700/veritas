@@ -1,9 +1,9 @@
 package linearalgebra_test
 
 import (
-	"testing"
 	"github.com/marti700/veritas/linearalgebra"
 	"github.com/marti700/veritas/linearalgebra/lintest"
+	"testing"
 )
 
 func TestOnes(t *testing.T) {
@@ -37,5 +37,19 @@ func TestOnes(t *testing.T) {
 
 	if !lintest.MatrixEq1(ans2, result3) {
 		t.Error("The anwer should be ", ans2, " but was ", result3)
+	}
+}
+
+func TestSumMatOutil(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2},
+		{3, 4},
+	})
+
+	ans := 10.0
+	result := linearalgebra.ElementsSum(m)
+
+	if ans != result {
+		t.Error("The anwer should be ", ans, " but was ", result)
 	}
 }
