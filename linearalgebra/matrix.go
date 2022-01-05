@@ -44,6 +44,23 @@ func NewRowVector(m []float64) Matrix {
 	return NewMatrix(temp)
 }
 
+func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
+	if m.Col != m1.Col && m.Row != m1.Row {
+		return Matrix{}, errors.New("error matrices must be of the same dimension")
+	}
+
+	newMatrix := make([]float64, len(m.Data))
+	for i := range m.Data {
+		newMatrix[i] = m.Data[i] * m1.Data[i]
+	}
+
+	return Matrix{
+		Row:  m.Row,
+		Col:  m.Col,
+		Data: newMatrix,
+	}, nil
+}
+
 //Returns the transpose of this matrix
 func (m Matrix) T() Matrix {
 

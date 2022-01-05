@@ -187,7 +187,30 @@ func TestScleBy(t *testing.T) {
 		{6, -4},
 	})
 
-	result  := m.ScaleBy(2.0)
+	result := m.ScaleBy(2.0)
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
+
+func TestHadamrdProduct(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{2, 2, 2},
+	})
+
+	m1 := linearalgebra.NewMatrix([][]float64{
+		{2, 2, 2},
+		{1, 2, 3},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64{
+		{2, 4, 6},
+		{2, 4, 6},
+	})
+
+	result, _ := m.HadamardProduct(m1)
 
 	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
