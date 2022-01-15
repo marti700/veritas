@@ -112,6 +112,21 @@ func insertCol(m Matrix, column []float64, index int) (Matrix, error) {
 }
 
 // Returns the result of adding all elements of provided matrix
-func ElementsSum (m Matrix) float64  {
+func ElementsSum(m Matrix) float64 {
 	return commons.Sum(m.Data)
+}
+
+// Returns an NXN identity matrix
+// the argument d represents the dimensions of the matrx
+func GenIdenityMatrix(d int) Matrix {
+	newMatrix := make([]float64, d*d)
+	for i := 0; i <= d*d; i+=d+1 {
+		newMatrix[i] = 1
+	}
+
+	return Matrix{
+		Row: d,
+		Col: d,
+		Data: newMatrix,
+	}
 }

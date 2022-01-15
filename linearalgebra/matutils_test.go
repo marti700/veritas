@@ -53,3 +53,20 @@ func TestSumMatOutil(t *testing.T) {
 		t.Error("The anwer should be ", ans, " but was ", result)
 	}
 }
+
+
+func TestGenIdentityMatrix(t *testing.T) {
+	ans := linearalgebra.NewMatrix([][]float64 {
+		{1,0,0,0,0},
+		{0,1,0,0,0},
+		{0,0,1,0,0},
+		{0,0,0,1,0},
+		{0,0,0,0,1},
+	})
+
+	result := linearalgebra.GenIdenityMatrix(5)
+
+if !lintest.MatrixEq1(ans,result)  {
+		t.Error("The anwer should be ", ans, " but was ", result)
+	}
+}
