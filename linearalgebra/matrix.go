@@ -44,8 +44,6 @@ func NewRowVector(m []float64) Matrix {
 	return NewMatrix(temp)
 }
 
-
-
 //Returns the transpose of this matrix
 func (m Matrix) T() Matrix {
 
@@ -217,4 +215,43 @@ func (m Matrix) GetCol(index int) Matrix {
 // returns the value of the matrix at index [i,j] assumming that matrix.Data holds a valid row major order matrix
 func (m Matrix) Get(i, j int) float64 {
 	return m.Data[coordsToRowMajorIndex(i, j, m.Col)]
+}
+
+
+// finds the invere of a matrix using the Gauss-Jordan algorithm
+// returns the inverse of this matrix
+func (m Matrix) Inv() Matrix {
+	// Generates an identity matrix
+	iMat := GenIdenityMatrix(m.Col)
+
+	//Build augmented matrix
+	augmentedMatrix, _ := m.InsertAt(iMat.GetCol(0), m.Col)
+	for i := 1; i < iMat.Col; i++ {
+		augmentedMatrix, _ = augmentedMatrix.InsertAt(iMat.GetCol(i), augmentedMatrix.Col)
+	}
+
+	//to set the new values to the augmanted matrix
+	apply := func(row int, m1, m2 Matrix) []float64 {
+		gIndex := m1.Col * row
+		for i := 0; i < len(m2.Data); i++ {
+			m1.Data[gIndex] = m2.Data[i]
+			gIndex++
+		}
+		return m1.Data
+	}
+
+	for i := 0; i < m.Col; i++ {
+		pivotRow := augmentedMatrix.GetRow(i).ScaleBy(1 / augmentedMatrix.Get(i, i))
+		// make the pivot (the element in the current row that is part of the main diagonal) 1 by multiplying the whole row by it's inverse
+		augmentedMatrix.Data = apply(i, augmentedMatrix, pivotRow)
+		for j := 0; j < m.Row; j++ {
+			// if the element is no tin the main diagonal
+			if i != j {
+				scaledPivot := pivotRow.ScaleBy(1 * augmentedMatrix.Get(j, i))
+				n, _ := augmentedMatrix.GetRow(j).Substract(scaledPivot)
+				augmentedMatrix.Data = apply(j, augmentedMatrix, n)
+			}
+		}
+	}
+	return Matrix{}
 }

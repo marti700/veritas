@@ -238,3 +238,15 @@ func TestHadamrdProduct(t *testing.T) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
+
+func TestInv(t *testing.T) {
+m := linearalgebra.NewMatrix([][]float64{
+		{2, 8, 1},
+		{3, 2, 2},
+		{5, -6, 7},
+	})
+
+	result := m.Inv()
+
+	fmt.Println(result)
+}
