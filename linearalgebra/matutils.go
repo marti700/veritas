@@ -166,10 +166,9 @@ func Slice(m Matrix, start, end int, axis string) Matrix {
 	case "y":
 		newMatrixCols := end - start
 		data := make([]float64, newMatrixCols*m.Row)
-		jumps := m.Col
-		j := 0
 		for i := 0; i < newMatrixCols; i++ {
-			j = i
+			jumps := m.Row
+			j := i
 			colIndex := 0*m.Col + start
 			for jumps > 0 {
 				data[j] = m.Data[colIndex]
@@ -178,7 +177,6 @@ func Slice(m Matrix, start, end int, axis string) Matrix {
 				jumps--
 			}
 			start++
-			jumps = m.Col
 		}
 		newMatrix.Row = m.Row
 		newMatrix.Col = newMatrixCols
