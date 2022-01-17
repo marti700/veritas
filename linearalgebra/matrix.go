@@ -253,5 +253,5 @@ func (m Matrix) Inv() Matrix {
 			}
 		}
 	}
-	return Matrix{}
+	return Slice(augmentedMatrix, m.Col, m.Col*2, "y")
 }

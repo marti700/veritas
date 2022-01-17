@@ -246,7 +246,10 @@ m := linearalgebra.NewMatrix([][]float64{
 		{5, -6, 7},
 	})
 
-	result := m.Inv()
+	result,_ := m.Mult(m.Inv())
 
-	fmt.Println(result)
+	//A*A^(-1) = I
+	if !lintest.IsAnIdentityMatrix(result) {
+		t.Error("the result: ", result, " is not equl the the identity matrix")
+	}
 }
