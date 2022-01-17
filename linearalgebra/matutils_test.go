@@ -54,19 +54,52 @@ func TestSumMatOutil(t *testing.T) {
 	}
 }
 
-
 func TestGenIdentityMatrix(t *testing.T) {
-	ans := linearalgebra.NewMatrix([][]float64 {
-		{1,0,0,0,0},
-		{0,1,0,0,0},
-		{0,0,1,0,0},
-		{0,0,0,1,0},
-		{0,0,0,0,1},
+	ans := linearalgebra.NewMatrix([][]float64{
+		{1, 0, 0, 0, 0},
+		{0, 1, 0, 0, 0},
+		{0, 0, 1, 0, 0},
+		{0, 0, 0, 1, 0},
+		{0, 0, 0, 0, 1},
 	})
 
 	result := linearalgebra.GenIdenityMatrix(5)
 
-if !lintest.MatrixEq1(ans,result)  {
+	if !lintest.MatrixEq1(ans, result) {
 		t.Error("The anwer should be ", ans, " but was ", result)
 	}
+}
+
+func TestSlice(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	})
+
+	// for the x axis
+	ans := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+	})
+
+	result := linearalgebra.Slice(m, 0, 2, "x")
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("The anwer should be ", ans, " but was ", result)
+	}
+
+	// for the y axix
+
+	ans1 := linearalgebra.NewMatrix([][]float64{
+		{1, 2},
+		{4, 5},
+		{7, 8},
+	})
+	result1 := linearalgebra.Slice(m, 0, 2, "y")
+
+	if !lintest.MatrixEq1(ans1, result1) {
+		t.Error("The anwer should be ", ans1, " but was ", result1)
+	}
+
 }

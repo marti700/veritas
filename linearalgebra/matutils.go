@@ -120,13 +120,72 @@ func ElementsSum(m Matrix) float64 {
 // the argument d represents the dimensions of the matrx
 func GenIdenityMatrix(d int) Matrix {
 	newMatrix := make([]float64, d*d)
-	for i := 0; i <= d*d; i+=d+1 {
+	for i := 0; i <= d*d; i += d + 1 {
 		newMatrix[i] = 1
 	}
 
 	return Matrix{
-		Row: d,
-		Col: d,
+		Row:  d,
+		Col:  d,
 		Data: newMatrix,
 	}
+}
+
+// slice a matrix depending on its axis
+// if axis is 'x' the matrix will be sliced row-wise
+// if the axis is 'y' the matrix will be sliced colum wise
+// Returns an sliced version of the matrix passed in as argument
+// EX
+// [
+// 	1 2
+// 	3 4
+// ]
+
+// if start = 0, end = 1 and axis = x the the returned matrix will be
+// [
+// 	1 2
+// ]
+//  if the axis = y then the result will be
+//  [
+// 	 1
+// 	 3
+//  ]
+func Slice(m Matrix, start, end int, axis string) Matrix {
+	if (start > m.Row || start < 0) || (end > m.Col || end < 0) {
+		panic("Error Matrix index out of range")
+	}
+	newMatrix := Matrix{}
+
+	switch axis {
+	case "x":
+		mStart := m.Col * start
+		mEnd := m.Col * end
+		newMatrix.Col = m.Col
+		newMatrix.Row = end - start
+		newMatrix.Data = m.Data[mStart:mEnd]
+	case "y":
+		newMatrixCols := end - start
+		data := make([]float64, newMatrixCols*m.Row)
+		jumps := m.Col
+		j := 0
+		for i := 0; i < newMatrixCols; i++ {
+			j = i
+			colIndex := 0*m.Col + start
+			for jumps > 0 {
+				data[j] = m.Data[colIndex]
+				colIndex += m.Col
+				j += newMatrixCols
+				jumps--
+			}
+			start++
+			jumps = m.Col
+		}
+		newMatrix.Row = m.Row
+		newMatrix.Col = newMatrixCols
+		newMatrix.Data = data
+	default:
+		panic("Unsupported axis")
+	}
+
+	return newMatrix
 }
