@@ -134,6 +134,8 @@ func GenIdenityMatrix(d int) Matrix {
 // slice a matrix depending on its axis
 // if axis is 'x' the matrix will be sliced row-wise
 // if the axis is 'y' the matrix will be sliced colum wise
+// it will panic if the start and end index are out of range matrix dimensions
+// or if an invalid axis is passed as argument
 // Returns an sliced version of the matrix passed in as argument
 // EX
 // [
@@ -151,19 +153,24 @@ func GenIdenityMatrix(d int) Matrix {
 // 	 3
 //  ]
 func Slice(m Matrix, start, end int, axis string) Matrix {
-	if (start > m.Row || start < 0) || (end > m.Col || end < 0) {
-		panic("Error Matrix index out of range")
-	}
 	newMatrix := Matrix{}
 
 	switch axis {
 	case "x":
+		if start > m.Row || start < 0  {
+			panic("Error Matrix index out of range")
+		}
+
 		mStart := m.Col * start
 		mEnd := m.Col * end
 		newMatrix.Col = m.Col
 		newMatrix.Row = end - start
 		newMatrix.Data = m.Data[mStart:mEnd]
 	case "y":
+		if end > m.Col || end < 0 {
+			panic("Error Matrix index out of range")
+		}
+
 		newMatrixCols := end - start
 		data := make([]float64, newMatrixCols*m.Row)
 		for i := 0; i < newMatrixCols; i++ {

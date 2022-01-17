@@ -245,7 +245,7 @@ func (m Matrix) Inv() Matrix {
 		// make the pivot (the element in the current row that is part of the main diagonal) 1 by multiplying the whole row by it's inverse
 		augmentedMatrix.Data = apply(i, augmentedMatrix, pivotRow)
 		for j := 0; j < m.Row; j++ {
-			// if the element is no tin the main diagonal
+			// if the element is not in the main diagonal
 			if i != j {
 				scaledPivot := pivotRow.ScaleBy(1 * augmentedMatrix.Get(j, i))
 				n, _ := augmentedMatrix.GetRow(j).Substract(scaledPivot)
