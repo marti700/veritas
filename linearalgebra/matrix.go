@@ -217,7 +217,6 @@ func (m Matrix) Get(i, j int) float64 {
 	return m.Data[coordsToRowMajorIndex(i, j, m.Col)]
 }
 
-
 // finds the invere of a matrix using the Gauss-Jordan algorithm
 // returns the inverse of this matrix
 func (m Matrix) Inv() Matrix {
@@ -240,7 +239,27 @@ func (m Matrix) Inv() Matrix {
 		return m1.Data
 	}
 
+	// to swap rows. This function search for entries that are not equal zero in the same
+	// column of the curren pivot, when it find one, it swaps the rows and return a new augmented Matrix
+	// which current pivot is a not zero entry
+	swapRow := func(augM Matrix, row int) Matrix {
+		col := row
+		for k := row; k < augM.Row; k++ {
+			if k != row && augM.Get(k, col) != 0 {
+				r1 := augM.GetRow(row)           // get the first row
+				r2 := augM.GetRow(k)             // get the first row with a non zero element
+				augM.Data = apply(row, augM, r2) // apply first row to the augmented matrix
+				augM.Data = apply(k, augM, r1)   // puts r1 where r2 were
+				return augM
+			}
+		}
+		panic("Not invertible matrix")
+	}
+
 	for i := 0; i < m.Col; i++ {
+		if augmentedMatrix.Get(i, i) == 0 {
+			augmentedMatrix = swapRow(augmentedMatrix, i)
+		}
 		pivotRow := augmentedMatrix.GetRow(i).ScaleBy(1 / augmentedMatrix.Get(i, i))
 		// make the pivot (the element in the current row that is part of the main diagonal) 1 by multiplying the whole row by it's inverse
 		augmentedMatrix.Data = apply(i, augmentedMatrix, pivotRow)
