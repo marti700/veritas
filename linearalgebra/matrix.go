@@ -1,9 +1,5 @@
 package linearalgebra
 
-import (
-	"errors"
-)
-
 // struct that represents a matrix
 // The Data field store the contents of the matrix in row major order
 // a matrix with one row and n columns is a called  row vector
@@ -80,9 +76,10 @@ func (m Matrix) ScaleBy(factor float64) Matrix {
 // MATRIX ARITMETIC
 
 // Returns a new matrix that represents the element wise multiplicaton of this matrix and another
-func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
+// panic if the provided matrix dimensions are not of the same as this matrix
+func (m Matrix) HadamardProduct(m1 Matrix) Matrix {
 	if m.Col != m1.Col && m.Row != m1.Row {
-		return Matrix{}, errors.New("error matrices must be of the same dimension")
+		panic("error, matrices must be of the same dimension")
 	}
 
 	newMatrix := make([]float64, len(m.Data))
@@ -94,13 +91,14 @@ func (m Matrix) HadamardProduct(m1 Matrix) (Matrix, error) {
 		Row:  m.Row,
 		Col:  m.Col,
 		Data: newMatrix,
-	}, nil
+	}
 }
 
 // Returns a new matrix which represents the result of adding this matrix to another
-func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
+// panic if the provided matrix dont have the same dimensions of this matrix
+func (m Matrix) Sum(m1 Matrix) Matrix {
 	if m.Col != m1.Col || m.Row != m1.Row {
-		return Matrix{}, errors.New("can't add matrices with of diferen dimensions")
+		panic("can't add matrices with of diferen dimensions")
 	}
 
 	matrixSum := make([]float64, len(m.Data))
@@ -112,13 +110,14 @@ func (m Matrix) Sum(m1 Matrix) (Matrix, error) {
 		Row:  m.Row,
 		Col:  m.Col,
 		Data: matrixSum,
-	}, nil
+	}
 }
 
 // Returns a new matrix which represents the result of substracting this matrix from another
-func (m Matrix) Substract(m1 Matrix) (Matrix, error) {
+// panic if the provided matrix is not of the same dimensions of this matrix
+func (m Matrix) Substract(m1 Matrix) Matrix {
 	if m.Col != m1.Col || m.Row != m1.Row {
-		return Matrix{}, errors.New("can't substract matrices with of diferen dimensions")
+		panic("can't substract matrices with of diferen dimensions")
 	}
 
 	matrixSum := make([]float64, len(m.Data))
@@ -130,14 +129,15 @@ func (m Matrix) Substract(m1 Matrix) (Matrix, error) {
 		Row:  m.Row,
 		Col:  m.Col,
 		Data: matrixSum,
-	}, nil
+	}
 }
 
 // Returns a matrix that represents the result of multiplying this matrix to another
-func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
+// panics if the provided matrix number of rows differs from this matrix number of columns
+func (m Matrix) Mult(m1 Matrix) Matrix {
 
 	if m.Col != m1.Row {
-		return Matrix{}, errors.New("can't multiply matrices with diferent number of rows and columns")
+		panic("can't multiply matrices with diferent number of rows and columns")
 	}
 	var result = make([]float64, m.Row*m1.Col)
 	var r_index int
@@ -159,7 +159,7 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 		Row:  m.Row,
 		Col:  m1.Col,
 		Data: result,
-	}, nil
+	}
 }
 
 // MATRIX ARITMETIC END
@@ -167,9 +167,10 @@ func (m Matrix) Mult(m1 Matrix) (Matrix, error) {
 // inserts a vector into this matrix at the provided index
 // if vector is a column vector a new column will be added to the marix at the specified index
 // if vector is a row vector a new row will be inserted into this matrix at the provided index
-func (m Matrix) InsertAt(v Matrix, index int) (Matrix, error) {
+// panics if the provided matrix is not a vector
+func (m Matrix) InsertAt(v Matrix, index int) Matrix {
 	if !isVector(v) {
-		return Matrix{}, errors.New("column should be a Vector")
+		panic("provided matrix should be a Vector")
 	}
 
 	if v.Row > 1 {
@@ -224,9 +225,9 @@ func (m Matrix) Inv() Matrix {
 	iMat := GenIdenityMatrix(m.Col)
 
 	//Build augmented matrix
-	augmentedMatrix, _ := m.InsertAt(iMat.GetCol(0), m.Col)
+	augmentedMatrix := m.InsertAt(iMat.GetCol(0), m.Col)
 	for i := 1; i < iMat.Col; i++ {
-		augmentedMatrix, _ = augmentedMatrix.InsertAt(iMat.GetCol(i), augmentedMatrix.Col)
+		augmentedMatrix = augmentedMatrix.InsertAt(iMat.GetCol(i), augmentedMatrix.Col)
 	}
 
 	//to set the new values to the augmanted matrix
@@ -267,7 +268,7 @@ func (m Matrix) Inv() Matrix {
 			// if the element is not in the main diagonal
 			if i != j {
 				scaledPivot := pivotRow.ScaleBy(1 * augmentedMatrix.Get(j, i))
-				n, _ := augmentedMatrix.GetRow(j).Substract(scaledPivot)
+				n := augmentedMatrix.GetRow(j).Substract(scaledPivot)
 				augmentedMatrix.Data = apply(j, augmentedMatrix, n)
 			}
 		}

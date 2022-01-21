@@ -43,7 +43,7 @@ func TestMult(t *testing.T) {
 		{320, 335},
 	})
 
-	ans, _ := m1.Mult(m2)
+	ans := m1.Mult(m2)
 	if !lintest.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
@@ -71,7 +71,7 @@ func TestMult1(t *testing.T) {
 		{32, 122, 212, 302},
 	})
 
-	ans, _ := m1.Mult(m2)
+	ans := m1.Mult(m2)
 	if !lintest.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
@@ -82,7 +82,7 @@ func TestMult1(t *testing.T) {
 func TestInsertCol(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
 	ans := linearalgebra.NewMatrix([][]float64{{8, 9}, {1, 2}, {3, 4}})
-	result, _ := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)
+	result := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)
 
 	if !lintest.MatrixEq1(result, ans) {
 		fmt.Println(ans)
@@ -91,7 +91,7 @@ func TestInsertCol(t *testing.T) {
 
 	m1 := linearalgebra.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
 	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
-	result1, _ := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
+	result1 := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
 
 	if !lintest.MatrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
@@ -169,7 +169,7 @@ func TestSum(t *testing.T) {
 		{-3, -6},
 	})
 
-	result, _ := m.Sum(m1)
+	result := m.Sum(m1)
 
 	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
@@ -192,7 +192,7 @@ func TestSubsctract(t *testing.T) {
 		{9, 2},
 	})
 
-	result, _ := m.Substract(m1)
+	result := m.Substract(m1)
 
 	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
@@ -232,7 +232,7 @@ func TestHadamrdProduct(t *testing.T) {
 		{2, 4, 6},
 	})
 
-	result, _ := m.HadamardProduct(m1)
+	result := m.HadamardProduct(m1)
 
 	if !lintest.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
@@ -246,7 +246,7 @@ m := linearalgebra.NewMatrix([][]float64{
 		{5, -6, 7},
 	})
 
-	result,_ := m.Mult(m.Inv())
+	result := m.Mult(m.Inv())
 
 	//A*A^(-1) = I
 	if !lintest.IsAnIdentityMatrix(result) {

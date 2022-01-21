@@ -1,8 +1,6 @@
 package linearalgebra
 
 import (
-	"errors"
-
 	"github.com/marti700/veritas/commons"
 )
 
@@ -51,9 +49,10 @@ func coordsToRowMajorIndex(i, j, m int) int {
 // [1,2]
 // [8,9]
 // [3,4]
-func insertRow(m Matrix, row []float64, index int) (Matrix, error) {
+// panics if the row vector is not the same as the matrix column lenth
+func insertRow(m Matrix, row []float64, index int) Matrix {
 	if len(row) < m.Col || len(row) > m.Col {
-		return Matrix{}, errors.New("invalid row. row lenght should be equal to matrix column length")
+		panic("invalid row. row lenght should be equal to matrix column length")
 	}
 	newMatrix := make([]float64, len(m.Data)+len(row))
 	var newMatrixIndex int
@@ -73,7 +72,7 @@ func insertRow(m Matrix, row []float64, index int) (Matrix, error) {
 		Row:  m.Row + 1,
 		Col:  m.Col,
 		Data: newMatrix,
-	}, nil
+	}
 }
 
 // Inserts a column to a matrix at a given index, the index parameter is the index at which the new column will be added
@@ -85,9 +84,10 @@ func insertRow(m Matrix, row []float64, index int) (Matrix, error) {
 // This function with return the row major order quivalent of the Matrix
 // [1,8,2]
 // [3,9,4]
-func insertCol(m Matrix, column []float64, index int) (Matrix, error) {
+// panics if the column vector is not the same as the matrix row lenth
+func insertCol(m Matrix, column []float64, index int) Matrix {
 	if len(column) < m.Row || len(column) > m.Row {
-		return Matrix{}, errors.New("invalid column. Column lenght should be equal to matrix row length")
+		panic("invalid column. Column lenght should be equal to matrix row length")
 	}
 
 	newMatrix := make([]float64, len(m.Data)+len(column))
@@ -108,7 +108,7 @@ func insertCol(m Matrix, column []float64, index int) (Matrix, error) {
 		Row:  m.Row,
 		Col:  m.Col + 1,
 		Data: newMatrix,
-	}, nil
+	}
 }
 
 // Returns the result of adding all elements of provided matrix
