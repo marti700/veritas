@@ -232,7 +232,7 @@ func (m Matrix) Inv() Matrix {
 
 	//to set the new values to the augmanted matrix
 	apply := func(row int, m1, m2 Matrix) []float64 {
-		gIndex := m1.Col * row
+		gIndex := m1.Col * row //the index of the first element that have to be changed in the underlying data slice
 		for i := 0; i < len(m2.Data); i++ {
 			m1.Data[gIndex] = m2.Data[i]
 			gIndex++
@@ -241,16 +241,16 @@ func (m Matrix) Inv() Matrix {
 	}
 
 	// to swap rows. This function search for entries that are not equal zero in the same
-	// column of the curren pivot, when it find one, it swaps the rows and return a new augmented Matrix
+	// column of the curren pivot, when it finds one, it swaps the rows and return a new augmented Matrix
 	// which current pivot is a not zero entry
 	swapRow := func(augM Matrix, row int) Matrix {
 		col := row
 		for k := row; k < augM.Row; k++ {
 			if k != row && augM.Get(k, col) != 0 {
-				r1 := augM.GetRow(row)           // get the first row
-				r2 := augM.GetRow(k)             // get the first row with a non zero element
+				r1 := augM.GetRow(row)           // get the first row to be swap
+				r2 := augM.GetRow(k)             // get the first row with a non zero element in the diagonal
 				augM.Data = apply(row, augM, r2) // apply first row to the augmented matrix
-				augM.Data = apply(k, augM, r1)   // puts r1 where r2 were
+				augM.Data = apply(k, augM, r1)   // puts r1 where r2 was
 				return augM
 			}
 		}
@@ -274,4 +274,19 @@ func (m Matrix) Inv() Matrix {
 		}
 	}
 	return Slice(augmentedMatrix, m.Col, m.Col*2, "y")
+}
+
+// applies a function to all entries of this matrix
+// the fuction must accpect as an argument a float64 (since al matrix entrices are float64) and return a float64
+// returns a new matrix with the function applied to each entry of this matrix
+func (m Matrix) Map (f func(x float64) float64) Matrix {
+	newMatrix := make([]float64, len(m.Data))
+	for i := 0; i< len(m.Data) ; i++ {
+		newMatrix[i] = f(m.Data[i])
+	}
+	return Matrix {
+		Row: m.Row,
+		Col: m.Col,
+		Data: newMatrix,
+	}
 }

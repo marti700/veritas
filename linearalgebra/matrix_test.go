@@ -253,3 +253,26 @@ m := linearalgebra.NewMatrix([][]float64{
 		t.Error("the result: ", result, " is not equl the the identity matrix")
 	}
 }
+
+func TestMap(t *testing.T) {
+
+	m1 := linearalgebra.NewMatrix([][]float64 {
+		{1,2,3,4},
+		{5,6,7,8},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64 {
+		{1,4,9,16},
+		{25,36,49,64},
+	})
+
+	squareF := func (x float64) float64 {
+		return x*x
+	}
+
+	result := m1.Map(squareF)
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("answer should be: ", ans, "but was: ", result)
+	}
+}
