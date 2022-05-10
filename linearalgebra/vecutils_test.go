@@ -1,15 +1,14 @@
-package linearalgebra_test
+package linearalgebra
 
 import (
-	"github.com/marti700/veritas/linearalgebra"
 	"testing"
 )
 
 func TestSize(t *testing.T) {
-	v1 := linearalgebra.NewMatrix([][]float64{
+	v1 := NewMatrix([][]float64{
 		{1, 2, 3, 4, 5, 6},
 	})
-	v2 := linearalgebra.NewMatrix([][]float64{
+	v2 := NewMatrix([][]float64{
 		{1},
 		{2},
 		{3},
@@ -19,8 +18,8 @@ func TestSize(t *testing.T) {
 	ans1 := 6
 	ans2 := 4
 
-	result1, _ := linearalgebra.Size(v1)
-	result2, _ := linearalgebra.Size(v2)
+	result1, _ := Size(v1)
+	result2, _ := Size(v2)
 
 	if ans1 != result1 {
 		t.Error("The answer should be ", ans1, "but was ", result1)
@@ -31,10 +30,10 @@ func TestSize(t *testing.T) {
 }
 
 func TestDotProductRowCol(t *testing.T) {
-	v1 := linearalgebra.NewMatrix([][]float64{
+	v1 := NewMatrix([][]float64{
 		{1, 2, 3, 4, 5, 6},
 	})
-	v2 := linearalgebra.NewMatrix([][]float64{
+	v2 := NewMatrix([][]float64{
 		{1},
 		{2},
 		{3},
@@ -44,30 +43,30 @@ func TestDotProductRowCol(t *testing.T) {
 	})
 
 	ans := 91.0
-	result, _ := linearalgebra.DotProduct(v1,v2)
+	result, _ := DotProduct(v1, v2)
 
 	if ans != result {
 		t.Error("The answer should be ", ans, "but was ", result)
 	}
 }
 func TestDotProductRowRow(t *testing.T) {
-	v1 := linearalgebra.NewMatrix([][]float64{
+	v1 := NewMatrix([][]float64{
 		{2, 3, 4, 5, 5},
 	})
-	v2 := linearalgebra.NewMatrix([][]float64{
+	v2 := NewMatrix([][]float64{
 		{2, 3, 4, 5, 5},
 	})
 
 	ans1 := 79.0
 
-	result1, _ := linearalgebra.DotProduct(v1,v2)
+	result1, _ := DotProduct(v1, v2)
 
 	if ans1 != result1 {
 		t.Error("The answer should be ", ans1, "but was ", result1)
 	}
 }
 func TestDotProductColCol(t *testing.T) {
-	v1 := linearalgebra.NewMatrix([][]float64{
+	v1 := NewMatrix([][]float64{
 		{1},
 		{2},
 		{3},
@@ -76,7 +75,7 @@ func TestDotProductColCol(t *testing.T) {
 		{6},
 	})
 
-	v2 := linearalgebra.NewMatrix([][]float64{
+	v2 := NewMatrix([][]float64{
 		{1},
 		{2},
 		{3},
@@ -87,9 +86,77 @@ func TestDotProductColCol(t *testing.T) {
 
 	ans1 := 235.0
 
-	result1, _ := linearalgebra.DotProduct(v1,v2)
+	result1, _ := DotProduct(v1, v2)
 
 	if ans1 != result1 {
 		t.Error("The answer should be ", ans1, "but was ", result1)
 	}
+}
+
+func TestIsVector(t *testing.T) {
+	v1 := NewColumnVector([]float64{1, 2, 3, 4, 5, 6, 7})
+	v2 := NewRowVector([]float64{1, 2, 3, 4, 5, 67})
+
+	if !(IsVector(v1) && IsVector(v2)) {
+		t.Error("v1 and v2 are vectors")
+	}
+
+	m := NewMatrix([][]float64{
+		{2, 0, 1},
+		{3, 0, 2},
+		{5, -6, 7},
+	})
+
+	if IsVector(m) {
+		t.Error("M is a matrix, not a vector")
+	}
+
+}
+
+func TestIsRowVector(t *testing.T) {
+	v1 := NewColumnVector([]float64{1, 2, 3, 4, 5, 6, 7})
+	v2 := NewRowVector([]float64{1, 2, 3, 4, 5, 67})
+
+	if !(IsRowVector(v2)) {
+		t.Error("v1 and v2 are vectors")
+	}
+
+	if IsRowVector(v1) {
+		t.Error("v1 is a column vector")
+	}
+
+	m := NewMatrix([][]float64{
+		{2, 0, 1},
+		{3, 0, 2},
+		{5, -6, 7},
+	})
+
+	if IsRowVector(m) {
+		t.Error("M is a matrix, not a Row vector")
+	}
+
+}
+
+func TestIsColumnVector(t *testing.T) {
+	v1 := NewColumnVector([]float64{1, 2, 3, 4, 5, 6, 7})
+	v2 := NewRowVector([]float64{1, 2, 3, 4, 5, 67})
+
+	if !(IsColumnVector(v1)) {
+		t.Error("v1 is a column vector")
+	}
+
+if (IsColumnVector(v2)) {
+		t.Error("v2 is a row vector")
+	}
+
+	m := NewMatrix([][]float64{
+		{2, 0, 1},
+		{3, 0, 2},
+		{5, -6, 7},
+	})
+
+	if IsVector(m) {
+		t.Error("M is a matrix, not a column vector")
+	}
+
 }

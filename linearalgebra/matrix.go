@@ -169,7 +169,7 @@ func (m Matrix) Mult(m1 Matrix) Matrix {
 // if vector is a row vector a new row will be inserted into this matrix at the provided index
 // panics if the provided matrix is not a vector
 func (m Matrix) InsertAt(v Matrix, index int) Matrix {
-	if !isVector(v) {
+	if !IsVector(v) {
 		panic("provided matrix should be a Vector")
 	}
 

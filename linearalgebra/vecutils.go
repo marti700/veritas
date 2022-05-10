@@ -9,7 +9,7 @@ import "errors"
 // returns the number of elements of a vector
 // an error is returned is the provides matrix is not a vector
 func Size(v Matrix) (int, error) {
-	if !isVector(v) {
+	if !IsVector(v) {
 		return 0, errors.New("Matrix is not a vector")
 	}
 	return v.Col * v.Row, nil
@@ -39,12 +39,16 @@ func DotProduct(v1, v2 Matrix) (float64, error) {
 }
 
 // returns true if a matrix is a vector false otherwise
-func isVector(v Matrix) bool {
-	if v.Row == 1 && v.Col > 1 {
-		return true
-	} else if v.Row > 1 && v.Col == 1 {
-		return true
-	} else {
-		return false
-	}
+func IsVector(v Matrix) bool {
+	return IsColumnVector(v) || IsRowVector(v)
+}
+
+// returns true is the provided matrix is a row vector false otherwise
+func IsRowVector(v Matrix) bool {
+	return v.Col > 1 && v.Row == 1
+}
+
+// returns true if the provided matrix is a column vector false otherwise
+func IsColumnVector(v Matrix) bool {
+	return v.Col == 1 && v.Row > 1
 }
