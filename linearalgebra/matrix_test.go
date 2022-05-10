@@ -276,3 +276,20 @@ func TestMap(t *testing.T) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
+
+func TestIsEmpty(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{{}})
+	m1 := linearalgebra.NewMatrix([][]float64 {
+		{1,2,3,4},
+		{5,6,7,8},
+	})
+
+	if !linearalgebra.IsEmpty(m) {
+		t.Error("m is empty an empty")
+	}
+
+	if linearalgebra.IsEmpty(m1) {
+		t.Error("M1 is not an empty matrix")
+	}
+
+}

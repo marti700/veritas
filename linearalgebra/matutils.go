@@ -194,3 +194,8 @@ func Slice(m Matrix, start, end int, axis string) Matrix {
 
 	return newMatrix
 }
+
+// returns true when a matrix has no elements, false otherwise
+func IsEmpty(m Matrix) bool {
+	return len(m.Data) == 0
+}
