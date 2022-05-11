@@ -117,10 +117,30 @@ func TestFilter(t *testing.T) {
 	})
 
 	result := linearalgebra.Filter(m, func(r linearalgebra.Matrix) bool {
-		return r.Get(0,0) > 2
-	},0)
+		return r.Get(0, 0) > 2
+	}, 0)
 
 	if !lintest.MatrixEq1(ans, result) {
 		t.Error("The anwer should be ", ans, " but was ", result)
+	}
+
+	m1 := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	})
+
+	ans1 := linearalgebra.NewMatrix([][]float64{
+		{2, 3},
+		{5, 6},
+		{8, 9},
+	})
+
+	result1 := linearalgebra.Filter(m1, func(r linearalgebra.Matrix) bool {
+		return r.Get(0, 0) >= 2
+	}, 1)
+
+	if !lintest.MatrixEq1(ans1, result1) {
+		t.Error("The anwer should be ", ans1, " but was ", result1)
 	}
 }

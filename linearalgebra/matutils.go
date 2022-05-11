@@ -49,7 +49,9 @@ func coordsToRowMajorIndex(i, j, m int) int {
 // [1,2]
 // [8,9]
 // [3,4]
-// panics if the row vector is not the same as the matrix column lenth
+// if the provided index is greater than the number of rows of the matrix
+// the row will be inserted at the end of the matrix
+// panics if the row vector is not the same as the matrix row lenth
 func insertRow(m Matrix, row []float64, index int) Matrix {
 	if len(row) < m.Col || len(row) > m.Col {
 		panic("invalid row. row lenght should be equal to matrix column length")
@@ -114,13 +116,19 @@ func wrapMatrix(row, col int, data []float64) Matrix {
 // This function with return the row major order quivalent of the Matrix
 // [1,8,2]
 // [3,9,4]
-// panics if the column vector is not the same as the matrix row lenth
+// if the provided index is greater than the number of columns of the matrix
+// the column will be inserted at the end of the matrix
+// this function panics if the column vector is not the same as the matrix column lenth
 func insertCol(m Matrix, column []float64, index int) Matrix {
 	if len(column) < m.Row || len(column) > m.Row {
 		panic("invalid column. Column lenght should be equal to matrix row length")
 	}
 
 	newMatrix := make([]float64, len(m.Data)+len(column))
+
+	if index > m.Col {
+		index = m.Col
+	}
 
 	var mDataIndex int
 	for i := 0; i < len(newMatrix); i++ {
