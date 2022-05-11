@@ -79,7 +79,7 @@ func TestMult1(t *testing.T) {
 
 }
 
-func TestInsertCol(t *testing.T) {
+func TestInsertAt(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
 	ans := linearalgebra.NewMatrix([][]float64{{8, 9}, {1, 2}, {3, 4}})
 	result := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)

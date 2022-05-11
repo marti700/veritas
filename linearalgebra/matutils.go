@@ -57,15 +57,36 @@ func insertRow(m Matrix, row []float64, index int) Matrix {
 	newMatrix := make([]float64, len(m.Data)+len(row))
 	var newMatrixIndex int
 
-	for i := 0; i < len(m.Data); i++ {
-		if i == index {
+	// start of the index row = m.Col * (index-2) --->1
+	startIdx := m.Col * index
+
+	// 0 is an special case
+	if index == 0 {
+		startIdx = 0
+	}
+
+	if index > m.Row {
+		startIdx = m.Col * m.Row
+	}
+
+	for i := 0; i < len(newMatrix); i++ {
+		if i == startIdx {
 			for j := 0; j < len(row); j++ {
 				newMatrix[newMatrixIndex] = row[j]
 				newMatrixIndex++
 			}
+			// protects from panic when inserting to the last matrix index
+			// when inserting to the last index the original matrix size will be less then the new matrix size
+			if index > m.Row || i > len(m.Data)-1 {
+				return wrapMatrix(m.Row+1, m.Col, newMatrix)
+			}
 		}
-		newMatrix[newMatrixIndex] = m.Data[i]
-		newMatrixIndex++
+
+		if i < len(m.Data) {
+			newMatrix[newMatrixIndex] = m.Data[i]
+			newMatrixIndex++
+		}
+
 	}
 
 	return Matrix{
@@ -73,6 +94,15 @@ func insertRow(m Matrix, row []float64, index int) Matrix {
 		Col:  m.Col,
 		Data: newMatrix,
 	}
+}
+
+func wrapMatrix(row, col int, data []float64) Matrix {
+	return Matrix{
+		Row:  row,
+		Col:  col,
+		Data: data,
+	}
+
 }
 
 // Inserts a column to a matrix at a given index, the index parameter is the index at which the new column will be added
@@ -157,7 +187,7 @@ func Slice(m Matrix, start, end int, axis string) Matrix {
 
 	switch axis {
 	case "x":
-		if start > m.Row || start < 0  {
+		if start > m.Row || start < 0 {
 			panic("Error Matrix index out of range")
 		}
 
@@ -198,4 +228,43 @@ func Slice(m Matrix, start, end int, axis string) Matrix {
 // returns true when a matrix has no elements, false otherwise
 func IsEmpty(m Matrix) bool {
 	return len(m.Data) == 0
+}
+
+// given a matrix and a boolean function of the type matrix -> bool and an axis returns a new matrix with the elements for what the function returns true
+// this function operates on the rows or columns, so each row/column of the provided matrix will be passed to the boolean function
+// the axis parameter controls whether the filter will be applied to the rows (axis = 0) or the columns (axis = 1) of the matrix any other value for the axis
+// this function will panic if the axis parameter have any other value different from 0 or 1
+func Filter(data Matrix, f func(r Matrix) bool, axis int) Matrix {
+	var newMatrix Matrix
+	var elements int
+
+	if axis == 0 {
+		elements = data.Row
+	} else {
+		elements = data.Col
+	}
+
+	for i := 0; i < elements; i++ {
+		current := getRowOrColumn(data, i, axis)
+		if f(current) {
+			if len(newMatrix.Data) == 0 {
+				newMatrix = current
+			} else if f(current) {
+				newMatrix = newMatrix.InsertAt(current, i)
+			}
+		}
+	}
+	return newMatrix
+}
+
+
+
+func getRowOrColumn(d Matrix, index, axis int) Matrix {
+	if axis == 0 {
+		return d.GetRow(index)
+	} else if axis == 1 {
+		return d.GetCol(index)
+	} else {
+		panic("Invalid axis")
+	}
 }

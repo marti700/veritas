@@ -103,3 +103,24 @@ func TestSlice(t *testing.T) {
 	}
 
 }
+
+func TestFilter(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+	})
+
+	ans := linearalgebra.NewMatrix([][]float64{
+		{4, 5, 6},
+		{7, 8, 9},
+	})
+
+	result := linearalgebra.Filter(m, func(r linearalgebra.Matrix) bool {
+		return r.Get(0,0) > 2
+	},0)
+
+	if !lintest.MatrixEq1(ans, result) {
+		t.Error("The anwer should be ", ans, " but was ", result)
+	}
+}
