@@ -265,6 +265,36 @@ func Filter(data Matrix, f func(r Matrix) bool, axis int) Matrix {
 	return newMatrix
 }
 
+// given a matrix and a boolean function of the type matrix -> bool returns two new matrices with the elements for what the function returns true
+// and the ones for what the function returns false.
+//
+// the axis parameter controls whether the filter will be applied to the rows (axis = 0) or the columns (axis = 1) of the matrix any other value for the axis
+// this function will panic if the axis parameter have any other value different from 0 or 1
+func Filter2(data Matrix, f func(r Matrix) bool, axis int) (Matrix, Matrix) {
+	var m1 Matrix
+	var m2 Matrix
+	var elements int
+
+	if axis == 0 {
+		elements = data.Row
+	} else {
+		elements = data.Col
+	}
+
+	for i := 0; i < elements; i++ {
+		current := getRowOrColumn(data, i, axis)
+		if f(current) && len(m1.Data) == 0 {
+			m1 = current
+		} else if !f(current) && len(m2.Data) == 0 {
+			m2 = current
+		} else if f(current) {
+			m1 = m1.InsertAt(current, i)
+		} else {
+			m2 = m2.InsertAt(current, i)
+		}
+	}
+	return m1, m2
+}
 
 
 func getRowOrColumn(d Matrix, index, axis int) Matrix {

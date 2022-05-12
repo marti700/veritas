@@ -144,3 +144,65 @@ func TestFilter(t *testing.T) {
 		t.Error("The anwer should be ", ans1, " but was ", result1)
 	}
 }
+
+func TestFilter2(t *testing.T) {
+	m := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{4, 5, 6},
+		{7, 8, 9},
+		{0, 8, 9},
+	})
+
+	ansT := linearalgebra.NewMatrix([][]float64{
+		{4, 5, 6},
+		{7, 8, 9},
+	})
+
+	ansF := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3},
+		{0, 8, 9},
+	})
+
+
+	resultT, resultF := linearalgebra.Filter2(m, func(r linearalgebra.Matrix) bool {
+		return r.Get(0, 0) > 2
+	}, 0)
+
+	if !lintest.MatrixEq1(ansT, resultT) {
+		t.Error("The anwer should be ", ansT, " but was ", resultT)
+	}
+
+if !lintest.MatrixEq1(ansF, resultF) {
+		t.Error("The anwer should be ", ansF, " but was ", resultF)
+	}
+
+	m1 := linearalgebra.NewMatrix([][]float64{
+		{1, 2, 3, 0},
+		{4, 5, 6, 1},
+		{7, 8, 9, 3},
+	})
+
+	ans1T := linearalgebra.NewMatrix([][]float64{
+		{2, 3},
+		{5, 6},
+		{8, 9},
+	})
+
+ans1F := linearalgebra.NewMatrix([][]float64{
+		{1, 0},
+		{4, 1},
+		{7, 3},
+	})
+
+	result1T, result1F := linearalgebra.Filter2(m1, func(r linearalgebra.Matrix) bool {
+		return r.Get(0, 0) >= 2
+	}, 1)
+
+	if !lintest.MatrixEq1(ans1T, result1T) {
+		t.Error("The anwer should be ", ans1T, " but was ", result1T)
+	}
+
+if !lintest.MatrixEq1(ans1F, result1F) {
+		t.Error("The anwer should be ", ans1F, " but was ", result1F)
+	}
+}
