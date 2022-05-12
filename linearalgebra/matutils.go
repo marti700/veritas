@@ -39,6 +39,24 @@ func coordsToRowMajorIndex(i, j, m int) int {
 	return (i * m) + j
 }
 
+// inserts a vector into a matrix at the provided index
+// if vector is a column vector a new column will be added to the marix at the specified index
+// if vector is a row vector a new row will be inserted into this matrix at the provided index
+// panics if the v argument is not a vector or if the provided vector is not of the same dimension
+// of the vector of the matrix at which it will be inserted (v columns must be equal to m columns or
+// v rows must be equal to m rows)
+func Insert(v, m Matrix, index int) Matrix {
+	if !IsVector(v) {
+		panic("provided matrix should be a Vector")
+	}
+
+	if v.Row > 1 {
+		return insertCol(m, v.Data, index)
+	} else {
+		return insertRow(m, v.Data, index)
+	}
+}
+
 // Inserts a row to a matrix at a given index, the index parameter is the index at which the new row will be added
 // E.X
 // if IsertCall is called in this matrix

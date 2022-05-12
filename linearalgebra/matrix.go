@@ -164,6 +164,7 @@ func (m Matrix) Mult(m1 Matrix) Matrix {
 
 // MATRIX ARITMETIC END
 
+
 // inserts a vector into this matrix at the provided index
 // if vector is a column vector a new column will be added to the marix at the specified index
 // if vector is a row vector a new row will be inserted into this matrix at the provided index
