@@ -45,10 +45,10 @@ func IsVector(v Matrix) bool {
 
 // returns true is the provided matrix is a row vector false otherwise
 func IsRowVector(v Matrix) bool {
-	return v.Col > 1 && v.Row == 1
+	return v.Row == 1
 }
 
 // returns true if the provided matrix is a column vector false otherwise
 func IsColumnVector(v Matrix) bool {
-	return v.Col == 1 && v.Row > 1
+	return v.Col == 1
 }
