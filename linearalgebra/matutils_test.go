@@ -210,7 +210,7 @@ if !lintest.MatrixEq1(ans1F, result1F) {
 func TestInsert(t *testing.T) {
 	m := linearalgebra.NewMatrix([][]float64{{1, 2}, {3, 4}})
 	ans := linearalgebra.NewMatrix([][]float64{{8, 9}, {1, 2}, {3, 4}})
-	result := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)
+	result := linearalgebra.Insert(linearalgebra.NewMatrix([][]float64{{8, 9}}), m, 0)
 
 	if !lintest.MatrixEq1(result, ans) {
 		t.Error("answer should be: ", ans, "but was: ", result)
@@ -218,7 +218,7 @@ func TestInsert(t *testing.T) {
 
 	m1 := linearalgebra.NewMatrix([][]float64{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {9, 10, 11}})
 	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
-	result1 := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
+	result1 := linearalgebra.Insert(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), m1, 1)
 
 	if !lintest.MatrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
