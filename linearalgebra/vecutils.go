@@ -75,3 +75,30 @@ func ElementWiseFilter(v Matrix, f func(n float64) bool, axis int) Matrix {
 
 	return NewColumnVector(newVector)
 }
+
+// given a vector and a boolean function of the type float64 -> bool returns two new matrix with the elements for what the function returns true
+// the for which the function returns false
+//
+// the axis parameter controls if the returned matrix will be a row or a column vector
+// this function will panic if the axis parameter have any other value different from 0 or 1
+func ElementWiseFilter2(v Matrix, f func(n float64) bool, axis int) (Matrix, Matrix) {
+	if !IsVector(v) || (axis < 0 || axis > 1) {
+		panic("Invalid parameters, make sure the provided matrix is a vector and that the axis parameter is either 0 or 1")
+	}
+
+	newVectorT := make([]float64, 0, len(v.Data)) // holds true values
+	newVectorF := make([]float64, 0, len(v.Data)) // holds false values
+	for _, e := range v.Data {
+		if f(e) {
+			newVectorT = append(newVectorT, e)
+		} else {
+			newVectorF = append(newVectorF, e)
+		}
+	}
+
+	if axis == 0 {
+		return NewRowVector(newVectorT), NewRowVector(newVectorF)
+	}
+
+	return NewColumnVector(newVectorT), NewColumnVector(newVectorF)
+}

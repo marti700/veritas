@@ -184,3 +184,37 @@ func TestElementWiseFilter(t *testing.T) {
 		t.Error("answer should be: ", expected2, "but actual was: ", result2)
 	}
 }
+
+func TestElementWiseFilter2(t *testing.T) {
+	v1 := NewColumnVector([]float64{1, 2, 3, 4, 5, 6, 7})
+	v2 := NewRowVector([]float64{1, 2, 3, 4, 5, 67})
+
+	expectedT1 := NewColumnVector([]float64{2, 4, 6})
+	expectedF1 := NewColumnVector([]float64{1,3,5,7})
+	expectedT2 := NewRowVector([]float64{2, 4})
+	expectedF2 := NewRowVector([]float64{1,3,5,67})
+
+	resultT1, resultF1 := ElementWiseFilter2(v1, func(n float64) bool {
+		return (int(n) % 2) == 0
+	}, 1)
+
+	resultT2, resultF2 := ElementWiseFilter2(v2, func(n float64) bool {
+		return (int(n) % 2) == 0
+	}, 0)
+
+	if !MatrixEq1(resultT1, expectedT1) {
+		t.Error("answer should be: ", expectedT1, "but actual was: ", resultT1)
+	}
+
+	if !MatrixEq1(resultF1, expectedF1) {
+		t.Error("answer should be: ", expectedF1, "but actual was: ", resultF1)
+	}
+
+if !MatrixEq1(resultT2, expectedT2) {
+		t.Error("answer should be: ", expectedT2, "but actual was: ", resultT2)
+	}
+
+	if !MatrixEq1(resultF2, expectedF2) {
+		t.Error("answer should be: ", expectedF2, "but actual was: ", resultF2)
+	}
+}
