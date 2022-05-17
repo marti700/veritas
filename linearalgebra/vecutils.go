@@ -23,7 +23,7 @@ func DotProduct(v1, v2 Matrix) (float64, error) {
 	v1Size, e1 := Size(v1)
 	v2Size, e2 := Size(v2)
 
-	if e1 !=nil || e2 !=nil {
+	if e1 != nil || e2 != nil {
 		return 0, errors.New("one or both of the matrices are not a vectors")
 	}
 
@@ -51,4 +51,27 @@ func IsRowVector(v Matrix) bool {
 // returns true if the provided matrix is a column vector false otherwise
 func IsColumnVector(v Matrix) bool {
 	return v.Col == 1
+}
+
+// given a vector and a boolean function of the type float64 -> bool returns a new matrix with the elements for what the function returns true
+//
+// the axis parameter controls if the returned matrix will be a row or a column vector
+// this function will panic if the axis parameter have any other value different from 0 or 1
+func ElementWiseFilter(v Matrix, f func(n float64) bool, axis int) Matrix {
+	if !IsVector(v) || (axis < 0 || axis > 1) {
+		panic("Invalid parameters, make sure the provided matrix is a vector and that the axis parameter is either 0 or 1")
+	}
+
+	newVector := make([]float64, 0, len(v.Data))
+	for _, e := range v.Data {
+		if f(e) {
+			newVector = append(newVector, e)
+		}
+	}
+
+	if axis == 0 {
+		return NewRowVector(newVector)
+	}
+
+	return NewColumnVector(newVector)
 }

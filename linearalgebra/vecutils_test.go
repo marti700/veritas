@@ -145,7 +145,7 @@ func TestIsColumnVector(t *testing.T) {
 		t.Error("v1 is a column vector")
 	}
 
-if (IsColumnVector(v2)) {
+	if IsColumnVector(v2) {
 		t.Error("v2 is a row vector")
 	}
 
@@ -159,4 +159,28 @@ if (IsColumnVector(v2)) {
 		t.Error("M is a matrix, not a column vector")
 	}
 
+}
+
+func TestElementWiseFilter(t *testing.T) {
+	v1 := NewColumnVector([]float64{1, 2, 3, 4, 5, 6, 7})
+	v2 := NewRowVector([]float64{1, 2, 3, 4, 5, 67})
+
+	expected1 := NewColumnVector([]float64{2, 4, 6})
+	expected2 := NewRowVector([]float64{2, 4})
+
+	result1 := ElementWiseFilter(v1, func(n float64) bool {
+		return (int(n) % 2) == 0
+	}, 1)
+
+	result2 := ElementWiseFilter(v2, func(n float64) bool {
+		return (int(n) % 2) == 0
+	}, 0)
+
+	if !MatrixEq1(result1, expected1) {
+		t.Error("answer should be: ", expected1, "but actual was: ", result1)
+	}
+
+	if !MatrixEq1(result2, expected2) {
+		t.Error("answer should be: ", expected2, "but actual was: ", result2)
+	}
 }
