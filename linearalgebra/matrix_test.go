@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/marti700/veritas/linearalgebra"
-	"github.com/marti700/veritas/linearalgebra/lintest"
 )
 
 func TestTranspose(t *testing.T) {
@@ -22,7 +21,7 @@ func TestTranspose(t *testing.T) {
 		{3, 6},
 	})
 
-	if !lintest.MatrixEq1(ans, expectedAnswer) {
+	if !linearalgebra.MatrixEq1(ans, expectedAnswer) {
 		t.Error("Expected result is: ", expectedAnswer, "but resultWas: ", ans)
 	}
 }
@@ -44,7 +43,7 @@ func TestMult(t *testing.T) {
 	})
 
 	ans := m1.Mult(m2)
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
 	}
@@ -72,7 +71,7 @@ func TestMult1(t *testing.T) {
 	})
 
 	ans := m1.Mult(m2)
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", result, "but was: ", ans)
 	}
@@ -84,7 +83,7 @@ func TestInsertAt(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{{8, 9}, {1, 2}, {3, 4}})
 	result := m.InsertAt(linearalgebra.NewMatrix([][]float64{{8, 9}}), 0)
 
-	if !lintest.MatrixEq1(result, ans) {
+	if !linearalgebra.MatrixEq1(result, ans) {
 		fmt.Println(ans)
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
@@ -93,7 +92,7 @@ func TestInsertAt(t *testing.T) {
 	ans1 := linearalgebra.NewMatrix([][]float64{{0, 1, 1, 2}, {3, 2, 4, 5}, {6, 3, 7, 8}, {9, 4, 10, 11}})
 	result1 := m1.InsertAt(linearalgebra.NewMatrix([][]float64{{1}, {2}, {3}, {4}}), 1)
 
-	if !lintest.MatrixEq1(result1, ans1) {
+	if !linearalgebra.MatrixEq1(result1, ans1) {
 		t.Error("answer should be: ", ans1, "but was: ", result1)
 	}
 }
@@ -107,7 +106,7 @@ func TestGetRow(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{{1, 2, 3}})
 	result := m.GetRow(0)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -122,7 +121,7 @@ func TestGetCol(t *testing.T) {
 	ans := linearalgebra.NewMatrix([][]float64{{1}, {3}, {5}})
 	result := m.GetCol(0)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -136,7 +135,7 @@ func TestNewColumnVector(t *testing.T) {
 
 	result := linearalgebra.NewColumnVector([]float64{1, 2, 3})
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -148,7 +147,7 @@ func TestNewRowVector(t *testing.T) {
 
 	result := linearalgebra.NewRowVector([]float64{1, 2, 3})
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -171,7 +170,7 @@ func TestSum(t *testing.T) {
 
 	result := m.Sum(m1)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -194,7 +193,7 @@ func TestSubsctract(t *testing.T) {
 
 	result := m.Substract(m1)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -211,7 +210,7 @@ func TestScleBy(t *testing.T) {
 
 	result := m.ScaleBy(2.0)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -234,7 +233,7 @@ func TestHadamrdProduct(t *testing.T) {
 
 	result := m.HadamardProduct(m1)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
@@ -249,7 +248,7 @@ m := linearalgebra.NewMatrix([][]float64{
 	result := m.Mult(m.Inv())
 
 	//A*A^(-1) = I
-	if !lintest.IsAnIdentityMatrix(result) {
+	if !linearalgebra.IsAnIdentityMatrix(result) {
 		t.Error("the result: ", result, " is not equl the the identity matrix")
 	}
 }
@@ -272,7 +271,7 @@ func TestMap(t *testing.T) {
 
 	result := m1.Map(squareF)
 
-	if !lintest.MatrixEq1(ans, result) {
+	if !linearalgebra.MatrixEq1(ans, result) {
 		t.Error("answer should be: ", ans, "but was: ", result)
 	}
 }
