@@ -11,3 +11,14 @@ func Mean(data []float64) float64 {
 
 	return sum / float64(len(data))
 }
+
+// returns the minimun value in this slice
+func Min(s []float64) float64 {
+	min := s[0]
+	for _, val := range s {
+		if min > val {
+			min = val
+		}
+	}
+	return min
+}
