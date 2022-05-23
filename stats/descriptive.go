@@ -22,3 +22,14 @@ func Min(s []float64) float64 {
 	}
 	return min
 }
+
+// returns the minimun value in this slice
+func Max(s []float64) float64 {
+	max := s[0]
+	for _, val := range s {
+		if max < val {
+			max = val
+		}
+	}
+	return max
+}

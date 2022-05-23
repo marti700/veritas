@@ -23,3 +23,14 @@ func TestMin(t *testing.T) {
 		t.Error("Result was: ", result, "But ", ans, "Was expected")
 	}
 }
+
+func TestMax(t *testing.T) {
+	v := []float64{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	ans := 10.0
+
+	result := Max(v)
+
+	if result != ans {
+		t.Error("Result was: ", result, "But ", ans, "Was expected")
+	}
+}
